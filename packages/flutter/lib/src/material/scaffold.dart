@@ -969,6 +969,7 @@ class Scaffold extends StatefulWidget {
     this.extendBody = false,
     this.drawerScrimColor,
     this.drawerEdgeDragWidth,
+    this.overrideStatusbar
   }) : assert(primary != null),
        assert(extendBody != null),
        assert(drawerDragStartBehavior != null),
@@ -2223,20 +2224,23 @@ class ScaffoldState extends State<Scaffold> with TickerProviderStateMixin {
 
     switch (themeData.platform) {
       case TargetPlatform.iOS:
-        _addIfNonNull(
-          children,
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _handleStatusBarTap,
-            // iOS accessibility automatically adds scroll-to-top to the clock in the status bar
-            excludeFromSemantics: true,
-          ),
-          _ScaffoldSlot.statusBar,
-          removeLeftPadding: false,
-          removeTopPadding: true,
-          removeRightPadding: false,
-          removeBottomPadding: true,
-        );
+        if (!widget.overrideStatusbar){
+            _addIfNonNull(
+                children,
+                GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _handleStatusBarTap,
+                    // iOS accessibility automatically adds scroll-to-top to the clock in the status bar
+                    excludeFromSemantics: true,
+                ),
+                _ScaffoldSlot.statusBar,
+                removeLeftPadding: false,
+                removeTopPadding: true,
+                removeRightPadding: false,
+                removeBottomPadding: true,
+            );
+        }
+            
         break;
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
